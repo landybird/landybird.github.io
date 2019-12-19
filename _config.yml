@@ -102,7 +102,7 @@ copyright: true
 # See: https://support.google.com/webmasters/answer/139066
 # Tips: Before you open this tag, remember set up your URL in _config.yml ( ex. url: http://yourdomain.com )
 canonical: true
-
+url: https://landybird.github.io
 # Change headers hierarchy on site-subtitle (will be main site description) and on all post/pages titles for better SEO-optimization.
 seo: true
 
@@ -234,7 +234,7 @@ social_icons:
 
 # Sidebar Avatar
 # in directory: /assets/images/avatar.gif
-avatar: https://landybird.github.io/landybird.github.io/assets/images/google.png
+avatar: https://landybird.github.io/landybird.github.io/assets/images/saitama.jpg
 
 # Table Of Contents in the Sidebar
 toc:
@@ -579,7 +579,7 @@ exturl: false
 #! ---------------------------------------------------------------
 
 # Motion
-use_motion: true
+use_motion: false
 
 # Fancybox
 fancybox: true
