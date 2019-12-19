@@ -1,0 +1,82 @@
+---
+title: Vue详情页返回到列表页保持原来的页码
+description: Vue详情页返回到列表页保持原来的页码
+categories:
+- 前端
+tags:
+- 前端
+---
+
+<br>
+
+
+# Vue详情页返回到列表页保持原来的页码：
+
+
+> 需求：
+
+在`Vue的组件中跳转`时，会`重新加载`，这样使得在查看某一页的详情时，再返回只能回到起始页。 可以通过`<keep-alive>` 包裹需要缓存的内容
+
+
+`组件之间切换的时候，保持这些组件的状态`
+
+
+ ![](https://landybird.github.io/landybird.github.io/assets/images/vue1.png)
+ 
+ 
+ 
+ ![](https://landybird.github.io/landybird.github.io/assets/images/vue2.png)
+
+
+
+```javascript
+
+    //  1  home.vue   子组件都会渲染到home.vue的<router-view>
+        
+        
+    
+    <template>
+        <div id="home">
+            <transition name="fade" mode="out-in">
+                <keep-alive>
+                    <router-view v-if="$route.meta.keepAlive"></router-view>
+                </keep-alive>
+            </transition>
+            <router-view v-if="!$route.meta.keepAlive"></router-view>
+        </div>
+    </template>
+
+
+    //  2 router.js 中给组件添加meta属性中的 keepAlive
+    
+        {
+            path: 'a',
+            name: 'a',
+            component: A,
+            meta: {
+                keepAlive: true
+            }
+        },
+        {
+            path: 'a/a_details/:Id',
+            name: 'a_details',
+            component: ADetails
+        } //  a的子组件
+
+
+    //  3 在 detail中 设置 返回 
+    
+    // 返回按钮 触发
+    
+    <el-button size="small" style="float: right;" @click="returnBack">返回</el-button>
+
+    // method:
+     returnBack(){
+                    this.$router.back(-1);
+                },
+    
+    
+```
+
+
+> [更多 keep-alive >> 官方文档](https://cn.vuejs.org/v2/guide/components-dynamic-async.html#%E5%9C%A8%E5%8A%A8%E6%80%81%E7%BB%84%E4%BB%B6%E4%B8%8A%E4%BD%BF%E7%94%A8-keep-alive)  
