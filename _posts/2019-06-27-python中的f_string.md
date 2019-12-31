@@ -185,16 +185,18 @@ SyntaxError: f-string expression part cannot include a backslash
 
 - 插入大括号
     
-    
+```   
     >>> f"{{ {str(1)} }}"
     '{ 1 }'
     >>> f"{{ str(1) }}"
     '{ str(1) }
-    
+```
+
 > 与str.format()的一点不同
 
 使用str.format()，非数字索引将自动转化为字符串，而f-strings则不会。
-    
+
+```
     >>> "Guard is {spurs[Guard]}".format(spurs=spurs)
     'Guard is Parker'
     
@@ -206,7 +208,7 @@ SyntaxError: f-string expression part cannot include a backslash
     
     >>> f"Guard is {spurs['Guard']}"
     'Guard is Parker'
-
+```
 
 
 [Format String Syntax](https://docs.python.org/3/library/string.html#formatstrings)
