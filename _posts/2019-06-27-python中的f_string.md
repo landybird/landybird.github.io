@@ -186,10 +186,10 @@ SyntaxError: f-string expression part cannot include a backslash
 - 插入大括号
     
     
-    >>> f"{{ {10 * 8} }}"
-    '{ 80 }'
-    >>> f"{{ 10 * 8 }}"
-    '{ 10 * 8 }
+    >>> f"{{ {str(1)} }}"
+    '{ 1 }'
+    >>> f"{{ str(1) }}"
+    '{ str(1) }
     
 > 与str.format()的一点不同
 
