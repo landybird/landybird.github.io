@@ -169,7 +169,7 @@ f"His name is {name}, he's {age} years old."
 
 ```python
 
-f'His name is {\'Tom\'}'
+
 SyntaxError: f-string expression part cannot include a backslash
 
 # 而应该使用不同的引号，或使用三引号。
@@ -184,17 +184,15 @@ SyntaxError: f-string expression part cannot include a backslash
 'u'是为了与`Python2.7`兼容的，而Python2.7不会支持f-strings，因此与'u'联合使用不会有任何效果
 
 - 插入大括号
-    
-    
-    >>> f"{{ {10 * 8} }}"
-    '{ 80 }'
-    >>> f"{{ 10 * 8 }}"
-    '{ 10 * 8 }
-    
+
+`外层再包一层大括号`
+
+
 > 与str.format()的一点不同
 
 使用str.format()，非数字索引将自动转化为字符串，而f-strings则不会。
-    
+
+```
     >>> "Guard is {spurs[Guard]}".format(spurs=spurs)
     'Guard is Parker'
     
@@ -206,7 +204,7 @@ SyntaxError: f-string expression part cannot include a backslash
     
     >>> f"Guard is {spurs['Guard']}"
     'Guard is Parker'
-
+```
 
 
 [Format String Syntax](https://docs.python.org/3/library/string.html#formatstrings)
