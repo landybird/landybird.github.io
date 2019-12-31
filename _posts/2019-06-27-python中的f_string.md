@@ -169,7 +169,7 @@ f"His name is {name}, he's {age} years old."
 
 ```python
 
-f'His name is {\'Tom\'}'
+f'His name is { \ ' Tom \ '} '
 SyntaxError: f-string expression part cannot include a backslash
 
 # 而应该使用不同的引号，或使用三引号。
