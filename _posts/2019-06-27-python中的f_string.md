@@ -184,13 +184,9 @@ SyntaxError: f-string expression part cannot include a backslash
 'u'是为了与`Python2.7`兼容的，而Python2.7不会支持f-strings，因此与'u'联合使用不会有任何效果
 
 - 插入大括号
-    
-```   
-    >>> f"{{ {str(1)} }}"
-    '{ 1 }'
-    >>> f"{{ str(1) }}"
-    '{ str(1) }
-```
+
+`外层再包一层大括号`
+
 
 > 与str.format()的一点不同
 
