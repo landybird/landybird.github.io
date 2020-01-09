@@ -24,7 +24,7 @@ uwsgi.ini 文件
 #pythonpath=/usr/local/xxxx/xxxx/project/webroot
 #static-map=/static=/usr/local/x/xx/project/static
 chdir=/home/A/B/project
-module=smb.wsgi
+module=xxx.wsgi
 #env=DJANGO_SETTINGS_MODULE=conf.settings
 #master=True
 pidfile=logs/project.pid

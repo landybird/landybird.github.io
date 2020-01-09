@@ -21,13 +21,13 @@ tags:
 錯誤出現的位置 
 ```
 Traceback (most recent call last):
-  File "/home/xxx/xxx/src/smb_thrift_server.py", line 2200, in <module>
+  File "/home/xxx/xxx/src/xxxx.py", line 2200, in <module>
     server.serve()
   File "/home/xxx/xxx/venv3/lib/python3.5/site-packages/thrift/server/TNonblockingServer.py", line 350, in serve
     self.handle()
   File "/home/xxx/xxxx/venv3/lib/python3.5/site-packages/thrift/server/TNonblockingServer.py", line 310, in handle
     rset, wset, xset = self._select()
-  File "/home/luban/smb_thrift_server/venv3/lib/python3.5/site-packages/thrift/server/TNonblockingServer.py", line 302, in _select
+  File "/home/xxx/_thrift_server/venv3/lib/python3.5/site-packages/thrift/server/TNonblockingServer.py", line 302, in _select
     return select.select(readable, writable, readable)
 ValueError: filedescriptor out of range in select()
 ```

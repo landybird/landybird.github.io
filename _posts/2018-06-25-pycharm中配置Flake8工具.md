@@ -31,19 +31,19 @@ tags:
 
     结果如下：
           ^
-    C:\Users\Domob\Desktop\dev\smb_middle_server\user_account\models.py:16:1: W391 blank line at end of file
+    C:\Users\Domob\Desktop\dev\middle_server\user_account\models.py:16:1: W391 blank line at end of file
     
     ^
-    C:\Users\Domob\Desktop\dev\smb_middle_server\user_account\tests.py:1:1: F401 'django.test.TestCase' imported but unused
+    C:\Users\Domob\Desktop\dev\_middle_server\user_account\tests.py:1:1: F401 'django.test.TestCase' imported but unused
     from django.test import TestCase
     ^
-    C:\Users\Domob\Desktop\dev\smb_middle_server\user_account\views.py:1:1: F401 'django.shortcuts.render' imported but unused
+    C:\Users\Domob\Desktop\dev\_middle_server\user_account\views.py:1:1: F401 'django.shortcuts.render' imported but unused
     from django.shortcuts import render
     ^
     ...
     
     
-    C:\Users\Domob\Desktop\dev\smb_middle_server\user_account\__init__.py:1:59: W292 no newline at end of file
+    C:\Users\Domob\Desktop\dev\_middle_server\user_account\__init__.py:1:59: W292 no newline at end of file
     default_app_config = 'user_account.apps.UserAccountConfig'                                                          ^
     2     E101 indentation contains mixed spaces and tabs
     2     E114 indentation is not a multiple of four (comment)
