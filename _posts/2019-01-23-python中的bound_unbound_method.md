@@ -83,6 +83,7 @@ class F():
 # F().foo_instance()
 # F.__dict__["foo_instance"].__get__(None, F)(F())
 # F.__dict__["foo_instance"].__get__(F(), F)()
+# 这里把F()实例 绑定给实例方法
 
 
 # F().foo_normal_function(F())                           # TypeError: foo_normal_function() takes no arguments (2 given)
@@ -153,7 +154,11 @@ class F(object):
 
 
 # py2
-print(F.foo_normal_function)   # <unbound method F.foo_normal_function>
+print(F.foo_normal_function)               # <unbound method F.foo_normal_function>
+# 不可以直接调用  F.foo_normal_function()    unbound method foo_normal_function() must be called with F instance as first argument 
+
+print(F.__dict__["foo_normal_function"])   # <function foo_normal_function at 0x02C15AF0>
+# 可以直接调用 F.__dict__["foo_normal_function"]()
 
 # py3 
 print(F.foo_normal_function)   # <function F.foo_normal_function at 0x0000018797783598>
