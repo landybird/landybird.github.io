@@ -302,7 +302,9 @@ async def dependency_c(dep_b=Depends(dependency_b)):
 The `exit code in dependencies with yield` is executed after `Exception Handlers`. 
 There's nothing catching exceptions thrown by your dependencies in the exit code (after the yield).
 
- ![](https://landybird.github.io/landybird.github.io/assets/images/fastapi.jpg)
+![](https://landybird.github.io/landybird.github.io/assets/images/fastapi1.jpg)
+
+
 
 
 > 上下文管理器 实现
