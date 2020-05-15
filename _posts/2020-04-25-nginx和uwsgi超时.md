@@ -9,45 +9,106 @@ tags:
 
 #### `uwsgi` 的设置
 
-- http-timeout和socket-timeout（连接时间）
+- `http-timeout`和`socket-timeout`（连接时间）
 
-http-timeout=60 # 就是60秒
-一般情况下，我们的uwsgi都是配合nginx使用的，所以用的都是socket-timeout参数。
-这两者的区别简单说就是：uwsgi单独使用就用http, 配合nginx就用socket
 
-解释下这两个时间的意义：
-举个例子：
-	前端（客户端）访问后端（服务器），服务器需要运行5分钟才能给前端返回响应，
-	但是http-timeout或者socket-timeout设置的是60，那么一分钟后，我的前端和后端
-	就断开连接了， 
-	！但是！我的服务器还是会坚持把这5分钟的活干完，只不过没有办法给前端返回
-	响应了！
-	（顾客去餐厅吃饭，做饭需要10分钟才能上菜，顾客等了1分钟就跑路了！）
-1
-2
-3
-4
-5
-6
-7
-8
-2.harakiri(服务器响应时间）
-harakiri=60 # 就是60秒
+         http-timeout=60 # 就是60秒
+        
+一般情况下，`uwsgi`都是配合`nginx`使用的，所以用的都是`socket-timeout`参数。
 
-和http-timeout有点类似，举个例子：
-	前端（客户端）向后端（服务器）发送到一个请求，等待服务器响应，服务器
-	需要1分钟来计算数据，但是我的harakiri就设置了10秒，那么10秒一到，
-	我们的服务器就强制终止了计算，前端肯定就得不到响应了。
-	（老板给员工发了一个任务，这个任务需要5天完成，这个员工干了一天
-	就撂挑子了！）
-1
-2
-3
-4
-5
-6
-3.buffer-size（前后端传输数据大小）
-buffer-size=1024 # 就是1024k，1M
+    uwsgi单独使用就用http 
+    
+    配合nginx就用socket
 
-这个容易理解，比如前段（客户端）向后端（服务器）发了一个请求，这个
-请求的大小是5M，那么buffer-size的大小就得大于1024*5，不然就报错了
+
+    例子:  
+            服务器需要运行5分钟才能给前端返回响应，
+	        但是http-timeout或者socket-timeout设置的是60s，
+	        一分钟后，前端和后端开连接
+	        ( 服务器还会坚持把这5分钟的任务执行完，但是不会给前端返回)
+	
+- `harakiri`(服务器响应时间）
+
+
+
+            harakiri=60 # 就是60秒
+
+
+请求等待服务器响应的时间
+
+
+	
+	
+- `buffer-size`（前后端传输数据大小）
+
+
+        
+            buffer-size=1024 # 就是1024k，1M
+
+
+
+
+#### `Nginx`的配置
+
+- keepalive_timeout
+
+```
+Syntax:	keepalive_timeout timeout [header_timeout];
+Default:	
+keepalive_timeout 75s;
+Context:	http, server, location
+```
+
+The first parameter sets a timeout during which a keep-alive client connection will stay open on the server side.
+
+The zero value disables keep-alive client connections. 
+The optional second parameter sets a value in the “Keep-Alive: timeout=time” response header field. 
+Two parameters may differ.
+
+The “Keep-Alive: timeout=time” header field is recognized by Mozilla and Konqueror.
+MSIE closes keep-alive connections by itself in about 60 seconds.
+
+- proxy_connect_timeout
+
+```
+Syntax:	proxy_connect_timeout time;
+Default:	
+proxy_connect_timeout 60s;
+Context:	http, server, location
+```
+
+Defines a timeout for `establishing a connection` with a proxied server.
+
+It should be noted that this timeout cannot usually exceed `75 seconds`.
+
+- proxy_read_timeout
+
+```
+Syntax:	proxy_read_timeout time;
+Default:	
+proxy_read_timeout 60s;
+Context:	http, server, location
+```
+
+Defines a timeout for `reading a response` from the proxied server. 
+
+The timeout is set only between two successive read operations, not for the transmission of the whole response.
+ 
+If the proxied server does not transmit anything within this time, the connection is closed.
+
+
+- proxy_send_timeout
+
+``` 
+Syntax:	proxy_send_timeout time;
+Default:	
+proxy_send_timeout 60s;
+Context:	http, server, location
+```
+
+
+Sets a timeout for `transmitting a request` to the proxied server. 
+
+The timeout is set only between two successive `write operations`, not for the transmission of the whole request.
+ 
+If the proxied server does not receive anything within this time, the connection is closed.
