@@ -52,4 +52,20 @@ response.write(codecs.BOM_UTF8)
 
 df.to_csv(response, encoding="utf-8-sig")
 return response
+
+
+
+
+# 1 
+
+stream_file = StringIO()
+df.reset_index()
+df.to_csv(stream_file)
+stream_file.seek(0)
+response = StreamingHttpResponse(stream_file)
+response['Content-Type'] = 'application/octet-stream; charset=utf-8-sig'
+response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(urlquote("数据报表"))
+
+return response
+
 ```
