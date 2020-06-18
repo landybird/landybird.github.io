@@ -16,7 +16,7 @@ indexs = {0: ['cost', '2020-01', 'testing'],
           1: ['cost', '2020-01', '360 Limited'],
           2: ['cost', '2020-02', 'Korea Co.,LTD'],
           3: ['cost', '2020-02', 'ADS4EACH HK TECH LIMITED']}
-columns =[['贾米'], ['amy'], ['tom'], ['zara'], ['jay'], ['Lee'], ['Uzi'], ['Zome'], ['Qoe'], ['Aoi'], ['Yeezy'], ['Hazy'], ['Wash'], ['pany'], ['zoey'], ['Moe'], ['total']]
+columns =[['米'], ['amy'], ['tom'], ['zara'], ['jay'], ['Lee'], ['Uzi'], ['Zome'], ['Qoe'], ['Aoi'], ['Yeezy'], ['Hazy'], ['Wash'], ['pany'], ['zoey'], ['Moe'], ['total']]
 data = {
     0: [0.0, 0.0, 0.0, 0.0, 0.0, 7.85, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 7.85],
     1: [0.0, 0.0, 0.0, 0.0, 0.0, 7.85, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 7.85],
@@ -68,4 +68,24 @@ response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(urlquot
 
 return response
 
+```
+
+
+```python
+# zip 打包
+def zip_file_response(response, path, *file_names):
+    os.chdir(path)
+    zip_file = zipfile.ZipFile(response, 'w')
+    for file_name in file_names:
+        if file_name:
+            zip_file.write(file_name, arcname=file_name)
+    for file_name in file_names:
+        if file_name and os.path.exists(file_name):
+            os.remove(file_name)
+    zip_file.close()
+
+response = HttpResponse(content_type='application/zip')
+zip_file_response(response, path, pie_file_name, excel_name)
+response['Content-Disposition'] = 'attachment; filename="{}.zip"'.format(urlquote("数据报表"))
+return response
 ```
