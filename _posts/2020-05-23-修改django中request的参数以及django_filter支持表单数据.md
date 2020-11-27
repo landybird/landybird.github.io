@@ -1,10 +1,10 @@
 ---
-title: `Django_filter`支持表单提交数据以及`django_rest_framework`中request的参数修改    
-description: Django_filter支持表单提交数据以及django_rest_framework中request的参数修改  
+title: 修改django中request的参数以及django_filter支持表单数据                     
+description: 修改django中request的参数以及django_filter支持表单数据
 categories:
 - python
 tags:
-- django   
+- python   
 ---
     
 
