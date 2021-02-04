@@ -65,16 +65,52 @@ class VSA(CustomModelViewSet):
 ```python
 # 重写FilterSet
 # 这样 可以在 GET 请求的时候， 把过多的过滤条件 放在body 里面 (application/x-www-form-urlencoded) 
+from enum import Enum
+
 from django_filters.filterset import BaseFilterSet, FilterSetMetaclass
+
+
+class ContentTypeEnum(Enum):
+    Json = "application/json"
+    FormData = "application/x-www-form-urlencoded"
+    TextPlain = "text/plain"
 
 class FilterSetOwn(BaseFilterSet, metaclass=FilterSetMetaclass):
     def __init__(self, data=None, queryset=None, *, request=None, prefix=None):
-        # 这里的data是  FilterMixin 初始化的  'data': self.request.GET or None,
-        # 判断 query_params 是否为 False <QueryDict: {}>
-        if bool(data) == False:
-            data = request.POST or request.data
+        # 根据content-type 更新query_dict
+        content_type = request.content_type.lower()
+        if content_type == ContentTypeEnum.Json.value:
+            filter_data_ = request.data
+            if not isinstance(filter_data_, dict):
+                filter_data_ = {}
+            filter_data_ = self._change_to_querydict(filter_data_)
+
+        elif content_type == ContentTypeEnum.FormData.value:
+            filter_data_ = request.POST
+            if not isinstance(filter_data_, QueryDict):
+                filter_data_ = {}
+            filter_data_ = dict(filter_data_)
+            for k, v in filter_data_.items():
+                filter_data_[k] = v[0].split(',')
+            filter_data_ = self._change_to_querydict(filter_data_)
+
+        else:
+            filter_data_ = {}
+        if request.method.lower() == 'get':
+            setattr(request.query_params, '_mutable', True)
+            request.query_params.update(filter_data_)
             # 没有GET传参 则解析 application/x-www-form-urlencoded
+            setattr(request.query_params, '_mutable', False)
         super(FilterSetOwn, self).__init__(data=data, queryset=queryset, request=request, prefix=prefix)
+
+    def _change_to_querydict(self, filter_dict):
+        query_dict = QueryDict('', mutable=True)
+        for key, value in filter_dict.items():
+            if isinstance(value, list):
+                value = [str(item) for item in value]
+            d = {key: value}
+            query_dict.update(MultiValueDict(d) if isinstance(value, list) else d)
+        return query_dict
 
 
 # parser_classes = [JSONParser, MultiPartParser, FormParser]
