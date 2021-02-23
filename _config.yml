@@ -214,6 +214,7 @@ font:
 # Value is the target link (E.g. GitHub: https://github.com/iissnan)
 social:
   GitHub: https://github.com/landybird
+  Telephone: echo 'MTc1MzUyODkwNjkK' | base64 -d
   StackOverflow: https://stackoverflow.com/users/10040873/jia-jimmy
   微博: #
 
