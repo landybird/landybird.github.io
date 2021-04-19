@@ -217,7 +217,10 @@ tags:
 
         sort -n  生序
         sort -rn 降序
-        
+    
+    INFO 2021-04-17 19:14:15,755 /usr/xxx.py task_1 386: 账户额度调整，账户：123,调整额度：0.01,结果：{"success":true}
+    awk '$2~/2021-04/&&/.账户额度调整/{print$2,$3, $7}' user_operate.log | awk -F ",调整额度：" '{print$1,$2}' | awk -F "账户额度调整，账   户：" '{print$1,$2,$3}' | sort -n -t " " -k 3
+       
 
 <br>
 
