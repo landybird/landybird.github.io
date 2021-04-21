@@ -71,6 +71,22 @@ CREATE TABLE `spend_for_month_not_bv` (
       
       2 将表初始化 truncate, 重新录入数据
       
+            DROP TABLE IF EXISTS `spend_for_month_copy` ;
+
+            CREATE TABLE `spend_for_month_copy`  LIKE `spend_for_month`;
+
+            INSERT INTO `spend_for_month_copy` 
+            SELECT * FROM `spend_for_month`;
+
+            TRUNCATE `spend_for_month`;
+
+
+            INSERT INTO `spend_for_month`(created_time,updated_time,system_value,checked_value,account_id,sale_leader_id,MONTH) 
+            SELECT created_time,updated_time,system_value,checked_value,account_id,sale_leader_id,MONTH 
+            FROM `spend_for_month_copy`;
+
+      
+      
       3 不使用强制覆盖的方式， 只创建没有的数据
       
       
