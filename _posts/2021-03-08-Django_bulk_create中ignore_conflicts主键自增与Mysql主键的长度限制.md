@@ -10,7 +10,7 @@ tags:
 #### 背景: 
 
 使用 Django 的 `bulk_create`, `bulk_update` 批量修改, 创建数据
-由于 `bulk_create(bulk_data, ignore_conflicts=True)` 会一直覆盖数据， 导致主键会一直增加知道超过限制
+由于 `bulk_create(bulk_data, ignore_conflicts=True)` 会一直覆盖数据， 导致主键会一直增加, 超过限制
 
 [Django--bulk_create](https://docs.djangoproject.com/en/3.2/ref/models/querysets/)
 
