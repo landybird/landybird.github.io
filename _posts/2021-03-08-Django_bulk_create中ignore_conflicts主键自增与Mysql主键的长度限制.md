@@ -9,10 +9,45 @@ tags:
 
 #### 背景: 
 
-使用 Django 的 `bulk_create`, `bulk_update` 批量修改, 创建数据
-由于 `bulk_create(bulk_data, ignore_conflicts=True)` 会一直覆盖数据， 导致主键会一直增加, 超过限制
+使用 Django 的 `bulk_create` 批量创建数据
+由于 `bulk_create(bulk_data, ignore_conflicts=True)` 会一直覆盖数据(unique重复)，导致主键会一直增加, 超过限制
+
 
 [Django--bulk_create](https://docs.djangoproject.com/en/3.2/ref/models/querysets/)
+
+
+[bulk_create](https://github.com/django/django/blob/main/django/db/models/query.py#463)
+
+
+[SQLInsertCompiler](https://github.com/django/django/blob/main/django/db/models/sql/compiler.py)
+最后执行的语句是
+
+```
+with self.connection.cursor() as cursor:
+    for sql, params in self.as_sql():
+        cursor.execute(sql, params)
+
+```
+
+```
+INSERT IGNORE INTO `xxx` (`month`, `system_value`, `checked_value`,
+`created_time`, `updated_time`, `account_id`) VALUES (%s, %s, %s, %s, %s, %s) ('2021-03
+-01', '4281.36', None, '2021-05-08 03:12:26.530947', '2021-05-08 03:12:26.530947', 8)
+
+```
+
+`MySQL 5.1.22+` `innodb_autoinc_lock_mode = 0` (“traditional” lock mode)
+
+
+    INSERT INTO ...  ON DUPLICATE KEY UPDATE ...
+
+    INSERT IGNORE INTO  ...
+    
+    REPLACE ...
+    
+    都会让主键自增
+
+[AUTO_INCREMENT Handling in InnoDB](https://dev.mysql.com/doc/refman/5.7/en/innodb-auto-increment-handling.html#innodb-auto-increment-lock-modes)
 
 
 #### 报错:
@@ -38,7 +73,7 @@ tags:
         
         tinyint
         
-            从 0 到 255 的整型数据。存储大小为 1 字节。
+            从 -128 到 128 的整型数据。存储大小为 1 字节。
 
 
 
