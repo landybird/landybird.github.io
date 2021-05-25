@@ -16,6 +16,11 @@ tags:
 
 `Debug=True`模式下可用
 
+
+非 Debug 模式 
+
+[How to print sql query from django as Dubug is False](https://stackoverflow.com/questions/67683964/how-to-print-sql-query-from-django-as-dubug-is-false)
+
 ```python
 
 from django.db import connection
