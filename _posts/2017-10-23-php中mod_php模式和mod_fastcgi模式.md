@@ -36,7 +36,7 @@ mod_php模式下，apache调用php执行的过程如下：
 > apache + php + mysql 的 完整的访问流程
  
  
- ![](https://landybird.github.io/landybird.github.io/assets/images/a1.jpg)
+ ![](https://landybird.github.io/assets/images/a1.jpg)
 
   
 >`apache` 用 LoadModule 来加载 php5_module ( mod_php模式 )
@@ -67,7 +67,7 @@ mod_php模式下，apache调用php执行的过程如下：
     php默认提供了很多种SAPI，常见的给apache和nginx的php5_module，CGI，给IIS的ISAPI，还有Shell的CLI。  
 
 
- ![](https://landybird.github.io/landybird.github.io/assets/images/a2.jpg)
+ ![](https://landybird.github.io/assets/images/a2.jpg)
     
 
 
@@ -90,7 +90,7 @@ cgi的好处就是完全独立于任何服务器，仅仅是做为中间分子�
     由于cgi比较老所以就出现了fastcgi来取代  启动多个cgi模块，在那里一直运行着等着，等着web发过来的请求，
     然后再给php解析运算完成生成html给web后，也不会退出，而且继续等着下一个web请求
 
- ![](https://landybird.github.io/landybird.github.io/assets/images/a3.png)
+ ![](https://landybird.github.io/assets/images/a3.png)
 
 
 

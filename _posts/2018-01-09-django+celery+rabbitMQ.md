@@ -105,7 +105,7 @@ taskkill /pid 22196 /f
 
 访问 http://127.0.0.1:15672 
 
- ![](https://landybird.github.io/landybird.github.io/assets/images/rq1.png)
+ ![](https://landybird.github.io/assets/images/rq1.png)
 
 
 `linux` 

@@ -9,7 +9,7 @@ tags:
 
 <br>
 
-![](https://landybird.github.io/landybird.github.io/assets/images/lpdp6.png)
+![](https://landybird.github.io/assets/images/lpdp6.png)
 
 
 ```python

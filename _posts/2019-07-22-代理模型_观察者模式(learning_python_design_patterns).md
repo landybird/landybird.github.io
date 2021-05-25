@@ -12,7 +12,7 @@ tags:
 
 #### Proxy  代理模式 -- `lazy initialization`
 
-![](https://landybird.github.io/landybird.github.io/assets/images/lpdp4.png)
+![](https://landybird.github.io/assets/images/lpdp4.png)
 
 ```python
 from abc import ABCMeta, abstractmethod
@@ -125,7 +125,7 @@ Deleted object. Count of objects =  0
     
     手机 app 接受信息
     
-![](https://landybird.github.io/landybird.github.io/assets/images/lpdp5.png)
+![](https://landybird.github.io/assets/images/lpdp5.png)
 
     
 ```python

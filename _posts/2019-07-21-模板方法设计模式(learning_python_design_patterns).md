@@ -10,7 +10,7 @@ tags:
 
 定义一个操作算法中的框架，而将这些步骤延迟加载到子类中，本质就是`固定算法框架`
 
-![](https://landybird.github.io/landybird.github.io/assets/images/lpdp7.png)
+![](https://landybird.github.io/assets/images/lpdp7.png)
 
 
 例子

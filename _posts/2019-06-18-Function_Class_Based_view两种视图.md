@@ -11,7 +11,7 @@ tags:
 
 流程图:
 
-![](https://landybird.github.io/landybird.github.io/assets/images/tsod1.png)
+![](https://landybird.github.io/assets/images/tsod1.png)
 
 通常情况下使用 `CBV`， `FBV`用来补充 
     

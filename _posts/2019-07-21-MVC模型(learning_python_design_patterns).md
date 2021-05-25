@@ -22,7 +22,7 @@ tags:
     Controller  二者之间的联系
     
     
-![](https://landybird.github.io/landybird.github.io/assets/images/lpdp1.png)
+![](https://landybird.github.io/assets/images/lpdp1.png)
 
 
 MVC模型在python web中的应用

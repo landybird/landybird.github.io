@@ -120,7 +120,7 @@ tags:
     • GIL released on I/O (read,write,send,recv,etc.)
 
 
-![](https://landybird.github.io/landybird.github.io/assets/images/t1.png)
+![](https://landybird.github.io/assets/images/t1.png)
 
 
 <br>
@@ -136,7 +136,7 @@ tags:
   
     ticks 不是时间概念，它对应着python解释器的指令 
     
-![](https://landybird.github.io/landybird.github.io/assets/images/t2.png)
+![](https://landybird.github.io/assets/images/t2.png)
 
 
 > 当前运行的线程会执行的周期性动作:
@@ -174,15 +174,15 @@ python 解释器只提供了一种类型的锁 (in C语言), 来构造, 实现 `
 > 工作模式:
 
 
-![](https://landybird.github.io/landybird.github.io/assets/images/t3.png)
+![](https://landybird.github.io/assets/images/t3.png)
 
 
 <br>
 
 ### (2) 线程切换
 
-![](https://landybird.github.io/landybird.github.io/assets/images/t4.png)
-![](https://landybird.github.io/landybird.github.io/assets/images/t5.png)
-![](https://landybird.github.io/landybird.github.io/assets/images/t6.png)
+![](https://landybird.github.io/assets/images/t4.png)
+![](https://landybird.github.io/assets/images/t5.png)
+![](https://landybird.github.io/assets/images/t6.png)
 
 

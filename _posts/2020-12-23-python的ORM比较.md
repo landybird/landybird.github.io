@@ -9,7 +9,7 @@ tags:
 
 #### 各种ORM性能对比图
 
-![](https://landybird.github.io/landybird.github.io/assets/images/ORM.png)
+![](https://landybird.github.io/assets/images/ORM.png)
 
 
 
