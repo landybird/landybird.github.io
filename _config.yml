@@ -228,8 +228,10 @@ social_icons:
   enable: true
   # Icon Mappings.
   # KeyMapsToSocialItemKey: NameOfTheIconFromFontAwesome
-  GitHub: github-alt
-  cnblog: book
+  GitHub: github-square
+  Twitter: twitter-square
+  Wechat: weixin
+  Instagram: instagram
   微博: weibo
   StackOverflow: stack-overflow
 
