@@ -104,7 +104,7 @@ copyright: true
 canonical: true
 url: https://landybird.github.io
 # Change headers hierarchy on site-subtitle (will be main site description) and on all post/pages titles for better SEO-optimization.
-seo: false
+seo: true
 
 # If true, will add site-subtitle to index page, added in jekyll config.
 # subtitle: Subtitle
@@ -216,6 +216,7 @@ social:
   GitHub: https://github.com/landybird
   StackOverflow: https://stackoverflow.com/users/10040873/jia-jimmy
   微博: #
+  Twitter: #
 
 
 # Social Links Icons
