@@ -279,10 +279,10 @@ sidebar:
   offset_float: 0
 
   # Back to top in sidebar
-  b2t: false
+  b2t: true
 
   # Scroll percent label in b2t button
-  scrollpercent: false
+  scrollpercent: true
 
 
 # Blog rolls
@@ -494,8 +494,8 @@ vkontakte_api:
 # Star rating support to each article.
 # To get your ID visit https://widgetpack.com
 rating:
-  enable: false
-  id:     #<app_id>
+  enable: true
+  id:     31007
   color:  fc6423
 
 
@@ -576,6 +576,9 @@ local_search:
 # Usage: {% exturl text url "title" %}
 # Alias: {% extlink text url "title" %}
 exturl: false
+
+reward_comment: 坚持原创技术分享，您的支持将鼓励我继续创作！
+wechatpay: https://landybird.github.io/assets/images/reward.jpg
 
 
 #! ---------------------------------------------------------------
