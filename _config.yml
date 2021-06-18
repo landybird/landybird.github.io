@@ -218,7 +218,7 @@ social:
   Wechat: #
   微博: #
   Twitter: #
-  Instagram: #
+  #Instagram: #
 
 
 # Social Links Icons
@@ -233,7 +233,7 @@ social_icons:
   GitHub: github-square
   Twitter: twitter-square
   Wechat: weixin
-  Instagram: instagram
+  #Instagram: instagram
   微博: weibo
   StackOverflow: stack-overflow
 
@@ -577,7 +577,7 @@ local_search:
 # Alias: {% extlink text url "title" %}
 exturl: false
 
-reward_comment: 坚持原创技术分享，您的支持将鼓励我继续创作！
+reward_comment: Buy me a 肥仔水！
 wechatpay: https://landybird.github.io/assets/images/reward.jpg
 
 
