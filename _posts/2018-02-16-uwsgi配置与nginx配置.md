@@ -37,6 +37,28 @@ enable-threads=true
 
 ```
 
+
+#### 重启uwsgi服务
+
+```
+# 1  uwsgi --reload /tmp/project-master.pid
+
+
+# 2 监控文件动态变化
+
+uwsgi.ini
+
+[uwsgi]
+...
+touch-reload=/home/code/your_project/
+touch-reload=/home/work/your_project/conf
+...
+
+ 
+```
+
+
+
 > 启动服务 `uwsgi --ini  uwsgi.ini`
 
 > 使用 shell 启动服务 `sh uwsgi.sh start`
