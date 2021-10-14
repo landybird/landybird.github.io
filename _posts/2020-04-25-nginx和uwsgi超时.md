@@ -9,7 +9,7 @@ tags:
 
 #### `uwsgi` 的设置
 
-- `http-timeout`和`socket-timeout`（连接时间）
+- `http-timeout`和`socket-timeout`（连接时间） 
 
 
          http-timeout=60 # 就是60秒
@@ -27,12 +27,19 @@ tags:
 	        一分钟后，前端和后端开连接
 	        ( 服务器还会坚持把这5分钟的任务执行完，但是不会给前端返回)
 	
+	
 - `harakiri`(服务器响应时间）
 
 
 
-            harakiri=60 # 就是60秒
+          	  harakiri=60 # 就是60秒
 
+
+
+
+		前端（客户端）向后端（服务器）发送到一个请求，等待服务器响应，服务器
+			需要1分钟来计算数据，但是我的harakiri就设置了10秒，那么10秒一到，
+			我们的服务器就强制终止了计算，前端肯定就得不到响应了。
 
 请求等待服务器响应的时间
 
@@ -49,6 +56,36 @@ tags:
 
 
 #### `Nginx`的配置
+
+
+使用`uwsgi`
+
+```
+ location / {
+        # 注意这儿，一般这三个配套修改
+        uwsgi_send_timeout 600;        # 指定向uWSGI传送请求的超时时间，完成握手后向uWSGI传送请求的超时时间。
+        uwsgi_connect_timeout 600;     # 指定连接到后端uWSGI的超时时间。
+        uwsgi_read_timeout 600;        # 指定接收uWSGI应答的超时时间，完成握手后接收uWSGI应答的超时时间。
+        uwsgi_pass  127.0.0.1:8000;
+        include /home/jason/code/interface/conf/uwsgi_params;       # the uwsgi_params file you installed
+    }
+
+
+# 
+        # 注意这儿，一般这三个配套修改
+        proxy_send_timeout 600;
+        proxy_connect_timeout 600;
+        proxy_read_timeout 600;
+
+
+
+
+```
+
+
+
+
+
 
 - keepalive_timeout
 
