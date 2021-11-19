@@ -7,6 +7,8 @@ tags:
 - python   
 ---
 
+### 1 主键一直增加超过 `int(11)` 范围
+
 #### 背景: 
 
 使用 Django 的 `bulk_create` 批量创建数据
@@ -126,3 +128,55 @@ CREATE TABLE `spend_for_month_not_bv` (
       
       
       
+
+
+### 2 `auto-increment` < `当前最大ID` "Duliplicate key" 问题 (主从数据不一致) `mysql5.6+`
+
+
+[深度解析auto-increment自增列"Duliplicate key"问题](https://mp.weixin.qq.com/s/YjPOayOFwCPwH084SG2Ggw)
+
+[REPLACE操作导致主从库AUTO_INCREMENT不一致的分析](https://yangwuyuan.com/2019/05/10/REPLACE%E6%93%8D%E4%BD%9C%E5%AF%BC%E8%87%B4%E4%B8%BB%E4%BB%8E%E5%BA%93AUTO-INCREMENT%E4%B8%8D%E4%B8%80%E8%87%B4%E7%9A%84%E5%88%86%E6%9E%90/#REPLACE%E6%93%8D%E4%BD%9C%E5%AF%BC%E8%87%B4AUTO-INCREMENT%E5%80%BC%E4%B8%8D%E4%B8%80%E8%87%B4)
+
+
+#### 背景: 
+
+在某些情况下，`replace操作`将导致`主从库auto_increment值不一致`，
+如果此时发生切换，将可能导致`数据无法插入`的问题
+
+
+    replace的语义 ”It either inserts, or deletes and inserts.”
+    
+    Mysql对于replace into实际是通过delete + insert语句实现，但是在ROW binlog格式下，会向binlog记录update类型日志。
+    
+    Insert语句会同步更新autoincrement，update则不会
+
+
+
+
+#### 报错原因:
+
+`replace into`在`Master`上按照`delete+insert`方式操作， `autoincrement`就是正常的。
+基于`ROW格式`复制到`slave`后，`slave`机上按照`update`操作回放，只更新行中自增键的值，不会更新`autoincrement`。
+因此在`slave`机上就会出现`max(id)`大于`autoincrement`的情况。
+
+此时在`ROW`模式下对于`insert`操作`binlog`记录了所有的列的值，
+在`slave`上回放时并不会重新分配自增id，因此不会报错。但是如果`slave切master`，遇到`Insert操作`就会出现`”Duplicate key”`的错误。
+
+
+#### 解决方法  
+
+业务侧的可能解决方案：
+
+    (1) binlog改为mixed或者statement格式
+    (2) 用Insert on duplicate key update代替replace into
+
+内核侧可能解决方案：
+    
+    (1) 在ROW格式下如果遇到replace into语句，则记录statement格式的logevent，将原始语句记录到binlog。
+  
+    (2) 在ROW格式下将replace into语句的logevent记录为一个delete event和一个insert event。
+    
+升级` mysql 8+`
+
+    mysql8.0版本中不仅将AUTO_INCREMENT值做了持久化，且在做更新操作时，
+    如果表上的自增列被更新为比auto_increment更大的值，auto_increment值也将被更新
