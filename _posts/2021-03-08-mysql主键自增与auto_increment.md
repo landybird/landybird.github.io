@@ -1,6 +1,6 @@
 ---
-title: Django bulk_create 中 ignore_conflicts 主键自增 与 Mysql 主键的长度限制
-description: Mysql 主键自增超过 `pk`的长度限制
+title: Mysql 主键自增 与 auto_increment 
+description: Mysql 主键自增 与 auto_increment 的问题
 categories: 
 - python    
 tags:
