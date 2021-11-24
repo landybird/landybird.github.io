@@ -172,3 +172,53 @@ class Pagination(PageNumberPagination):
             raise NotFound(msg)
 ```
 
+#### `django-filter` 使用
+
+
+```
+# views.py
+class VSDemo(CustomModelViewSet,  MixGetReqeustContext):
+    queryset = Model.objects.all()
+    serializer_class = Serializers
+    filter_backends = (SearchFilter, DjangoFilterBackend)
+    filter_class = FilterOwn
+    search_fields = ['..', ...]
+    
+    @action(methods=['get'], url_path='a-s', detail=False)
+    def list_count(self, request, *args, **kwargs):
+        self.serializer_class = SerializersV2
+        self.filter_class = FilterV2
+        ret_data = super().list(request, *args, **kwargs)
+        return ret_data
+
+# filters.py
+class FilterV2(FilterSet):
+   
+    field1 = filters.MultipleChoiceFilter(
+        field_name='db_field1',
+        choices=[],
+        widget=widgets.QueryArrayWidget
+    )
+    field2 = CharInFilter(
+        field_name='db_field2',
+        lookup_expr='in',
+        widget=widgets.QueryArrayWidget
+    )
+    field3 = filters.BooleanFilter(field_name='db_field3')
+
+    field4 =  filters.CharFilter(method='filter_name', widget=widgets.QueryArrayWidget)
+   
+    def filter_name(self, queryset, name, value):
+        qs = queryset
+        print(name, value) #  field4, ['a', 'b']
+        return qs
+
+
+
+    class Meta(object):
+        fields = [
+           ...
+        ]
+        model = Model
+
+```
