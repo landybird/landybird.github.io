@@ -1,11 +1,13 @@
 ---
 title: Django打开执行的sql记录
-description: Django打开执行的sql记录
+description: Django打开执行的sql记录, 获取可执行的SQL
 categories: 
 - python    
 tags:
 - django   
 ---
+
+### 查看执行的SQL
 
 #### 背景: 
 
@@ -82,5 +84,32 @@ if not ql.errored:
         print(query)
 else:
     print("Some error occured")
+
+```
+
+### 2 获取可以执行的SQL
+
+
+```
+class QueryTransforms:
+    """
+    Django 不提供原始的SQL语句， 分别将query + param传入数据库adapter
+    利用 cursor.execute EXPLAIN 截取 原始SQL 
+    tricks (https://code.djangoproject.com/ticket/17741)
+    """
+
+    def __init__(self, queryset):
+        self.queryset = queryset
+
+    @property
+    def query(self):
+        query, params = self.queryset.query.sql_with_params()
+        with connection.cursor() as cursor:
+            cursor.execute('EXPLAIN ' + query, params)
+            res = str(cursor.db.ops.last_executed_query(cursor, query, params))
+            assert res.startswith('EXPLAIN ')
+        return res[len('EXPLAIN '):]
+
+
 
 ```
