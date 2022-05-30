@@ -375,7 +375,13 @@ tags:
 
 #### 分割日志
 
+
 ```
+find /home/ -type f -mtime -1  # 查看目录下 一天内修改过的文件
+find /home/ -type f -mmin  +1  # 查看目录下 一分钟前修改过的文件
+
+wc -l filename  # 行数统计
+
 split -l 200000 wsgi.log -d -a 2 wsgi.log # 按200,000行數分割
 
 sed -i '1,1200000d' wsgi.log   # 删除前1200000数据
