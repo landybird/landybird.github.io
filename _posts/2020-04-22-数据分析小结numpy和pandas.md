@@ -680,3 +680,244 @@ FOX  BLACK  123.0    NaN
 GOAT BROWN    NaN   12.0
 
 ```
+
+
+
+#### pandas 实例
+
+
+```
+            pivot_date = options["date"]
+            if settings.DEBUG:
+                pivot_date = "2023-03-19"
+            base_column_fields = [
+                "merged_entity_name",
+                "settlement_name",
+                "account_id",
+                "account_status",
+                "sale_manage_id",
+                "spend",
+                "spend_last_7d",
+                "spend_last_90d",
+                "spend_date",
+                "account_id",
+                "company_id",
+                "account_type",
+                "fb_medium_type",
+                "fb_first_time",
+            ]
+            unique_fields = [
+                "merged_entity_name",
+            ]
+
+            drop_fields = [
+                'sale_manage_id',
+                'spend',
+                'account_type',
+                'fb_medium_type',
+                'fb_first_time',
+            ]
+
+            basic_queryset = KpiAccountDailyStatistic.objects.\
+                filter(spend_date=pivot_date).\
+                values(*base_column_fields)
+
+            df = pd.DataFrame.from_records(basic_queryset)
+
+            # todo 只取 merged entity 不为空
+            df = df[df["merged_entity_name"].apply(lambda x: x is not None)]
+
+            tmp_df = df.copy(deep=True)
+
+            # 只取 active的 indirect 账户 (第一次花费时间 > 90)
+            tmp_df = tmp_df[
+                (tmp_df.account_status == FbAccountStatusEnum.ACTIVE)
+                &
+                (tmp_df.fb_medium_type == FbMediumTypeEnum.InDirect)
+                ]
+            tmp_df["fb_first_time"] = tmp_df["fb_first_time"].astype('str')
+            tmp_df = tmp_df[tmp_df["fb_first_time"].apply(lambda x: self._over_90days(pivot_date, x))]
+
+            # 合并主体 QTD > 25 K
+            tmp_df = tmp_df.groupby(list(unique_fields)).spend_last_90d.sum().reset_index()
+            tmp_df = tmp_df[tmp_df["spend_last_90d"] > 25000]
+            # tmp_df = tmp_df.to_dict("records")
+
+            # 获取 AIB merged_entity 已达标
+            _AIB_MERGED_ENTITY_DICT = dict(tmp_df.values.tolist())
+            del tmp_df
+
+            tmp_df = df.copy(deep=True)
+            tmp_df["fb_first_time"] = tmp_df["fb_first_time"].astype('str')
+            tmp_df = tmp_df[tmp_df["fb_first_time"].apply(lambda x: self._over_90days(pivot_date, x, season_end=True))]
+            tmp_df = tmp_df["merged_entity_name"]
+            # tmp_df = tmp_df.replace(to_replace="None", value=np.nan).dropna()
+
+            # 可达标 Merge Entity
+            _AIB_MERGED_ENTITY_REACHABLE = tmp_df.values
+            _AIB_MERGED_ENTITY_REACHABLE = list(set(tmp_df.values) - set(_AIB_MERGED_ENTITY_DICT.keys()))
+            _AIB_MERGED_ENTITY_REACHABLE_DICT = dict.fromkeys(_AIB_MERGED_ENTITY_REACHABLE, 1)
+
+            # 按照 kpi_pivot_active_indirect_bonus_base 重新组织数据
+
+            # 全量 sale 关系
+            _SALE_RELATION_DICT = {}
+            for sale_obj in Sale.objects.all():
+                _SALE_RELATION_DICT[sale_obj.id] = sale_obj.sale_id, sale_obj.default_leader_id
+
+            df[["sale_id", "sale_leader_id"]] = df["sale_manage_id"].\
+                apply(lambda x: self._get_sale_leader_info(x, _SALE_RELATION_DICT)).apply(pd.Series)
+            df.loc[:, "is_aib"] = df["merged_entity_name"]. \
+                apply(lambda x: 1 if _AIB_MERGED_ENTITY_DICT.get(x) else 0)
+            df.loc[:, "aib_cost"] = df.apply(lambda x: x["spend_last_90d"] if x["is_aib"] else 0, axis=1)
+
+            df = df.drop(columns=drop_fields)
+
+            df = df.rename(
+                columns={
+                    "spend_last_90d": "spend_quarter",
+                    "spend_date": "pivot_date",
+                }
+            )
+
+            # 1 kpi_pivot_active_indirect_bonus_base
+            bulk_list_aib_base = []
+            trans_dic_list = df.to_dict("records")
+            for trans_dic in trans_dic_list:
+                bulk_list_aib_base.append(
+                    KpiPivotActiveIndirectBonusBase(
+                        **trans_dic
+                    )
+                )
+
+            #  kpi_pivot_aib_total Dataframe
+            tmp_df = df.copy(deep=True)
+            base_column_fields = [
+                "pivot_date",
+                "aib_cost",
+                "company_id",
+            ]
+            tmp_df = tmp_df[base_column_fields]
+
+            unique_fields = [
+                'company_id',
+                'pivot_date'
+            ]
+            tmp_df = tmp_df[tmp_df["aib_cost"] > 0]
+            tmp_df = tmp_df.groupby(list(unique_fields)).sum().reset_index()
+
+            # 2  kpi_pivot_aib_total
+            trans_dic_list = tmp_df.to_dict("records")
+            bulk_list_aib_total = []
+            for trans_dic in trans_dic_list:
+                bulk_list_aib_total.append(
+                    KpiPivotAibTotal(
+                        **trans_dic
+                    )
+                )
+
+            #  kpi_pivot_active_indirect_bonus_trend Dataframe
+            tmp_df = df.copy(deep=True)
+            base_column_fields = [
+                "pivot_date",
+                "aib_cost",
+                "spend_quarter",
+                "spend_last_7d",
+            ]
+            tmp_df = tmp_df[base_column_fields]
+
+            unique_fields = [
+                'pivot_date'
+            ]
+            tmp_df = tmp_df.groupby(list(unique_fields)).sum().reset_index()
+
+            # 3  kpi_pivot_active_indirect_bonus_trend
+            trans_dic_list = tmp_df.to_dict("records")
+            bulk_list_aib_trend = []
+            for trans_dic in trans_dic_list:
+                bulk_list_aib_trend.append(
+                    KpiPivotActiveIndirectBonusTrend(
+                        **trans_dic
+                    )
+                )
+
+            #  kpi_pivot_active_indirect_bonus_merge_entity Dataframe
+            tmp_df = df.copy(deep=True)
+            base_column_fields = [
+                "merged_entity_name",
+                "sale_id",
+                "sale_leader_id",
+                "pivot_date",
+                "aib_cost",
+                "spend_quarter",
+                "spend_last_7d",
+            ]
+            tmp_df = tmp_df[base_column_fields]
+            unique_fields = [
+                'pivot_date',
+                'merged_entity_name',
+                'sale_id',
+                'sale_leader_id',
+            ]
+            tmp_df = tmp_df.groupby(list(unique_fields)).sum().reset_index()
+
+            # 4  kpi_pivot_active_indirect_bonus_merge_entity
+            trans_dic_list = tmp_df.to_dict("records")
+            bulk_list_aib_merge_entity = []
+            for trans_dic in trans_dic_list:
+                bulk_list_aib_merge_entity.append(
+                    KpiPivotActiveIndirectBonusMergeEntity(
+                        **trans_dic
+                    )
+                )
+
+            #  kpi_pivot_active_indirect_bonus_sale Dataframe
+            tmp_df = df.copy(deep=True)
+            base_column_fields = [
+                "sale_id",
+                "sale_leader_id",
+                "pivot_date",
+                "aib_cost",
+                "spend_quarter",
+                "spend_last_7d",
+            ]
+
+            merged_entity_group_df = tmp_df[[
+                "sale_id",
+                "merged_entity_name",
+            ]].groupby(["sale_id"])
+
+            # 按销售分组的 merged entity
+            _SALE_MERGED_ENTITY_DICT = {}
+            for merged_entity_group in merged_entity_group_df:
+                sale_id, tmp_df_ = merged_entity_group
+                _SALE_MERGED_ENTITY_DICT[sale_id] = set(tmp_df_["merged_entity_name"].values)
+
+            tmp_df = tmp_df[base_column_fields]
+            unique_fields = [
+                'pivot_date',
+                'sale_id',
+                'sale_leader_id',
+            ]
+            tmp_df = tmp_df.groupby(list(unique_fields)).sum().reset_index()
+
+            tmp_df[["reached", "reachable", "un_reachable"]] = tmp_df["sale_id"].\
+                apply(lambda x: self._get_sale_merged_entity_info(x,
+                                                                  _AIB_MERGED_ENTITY_DICT,
+                                                                  _AIB_MERGED_ENTITY_REACHABLE_DICT,
+                                                                  _SALE_MERGED_ENTITY_DICT
+                                                                  )).apply(pd.Series)
+            # tmp_df = tmp_df[tmp_df["aib_cost"] > 0]
+
+            # 5  kpi_pivot_active_indirect_bonus_sale
+            trans_dic_list = tmp_df.to_dict("records")
+            bulk_list_aib_sale = []
+            for trans_dic in trans_dic_list:
+                bulk_list_aib_sale.append(
+                    KpiPivotActiveIndirectBonusSale(
+                        **trans_dic
+                    )
+                )
+
+
+```
