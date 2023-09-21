@@ -1,4 +1,4 @@
----
+![image](https://github.com/landybird/landybird.github.io/assets/37992065/1343416e-b6fd-4f49-a091-db608211cec9)---
 title: Kratos框架
 description: Kratos框架教程
 categories:
@@ -50,6 +50,10 @@ tags:
         export PATH=$GOROOT/bin:$GOPATH/bin:$PATH
         source ~/.zshrc　　# 如果是zsh
 
+#### goland 配置
+
+	1） 偏好设置里设置 Go Moudles 勾选 Enable Go Moudles integration 【goland 不识别package】
+	2） 注意 Goland 版本设置 与 对应支持的 go 版本 【引入报错】
 
 #### 安装protoc、protoc-gen-go
 
