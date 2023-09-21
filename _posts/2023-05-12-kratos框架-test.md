@@ -98,6 +98,9 @@ tags:
 
     kratos new helloworld
 
+    # 国内环境拉项目模板会失败 换个源
+    kratos new helloworld -r https://gitee.com/go-kratos/kratos-layout.git
+
 
 查看目录结构
     
