@@ -97,6 +97,8 @@ tags:
 
 
     kratos new helloworld
+    # 超时换源
+    kratos new helloworld -r https://gitee.com/go-kratos/kratos-layout.git
 
 
 查看目录结构
