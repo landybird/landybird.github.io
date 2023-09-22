@@ -54,6 +54,11 @@ tags:
 
 	1） 偏好设置里设置 Go Moudles 勾选 Enable Go Moudles integration 【goland 不识别package】
 	2） 注意 Goland 版本设置 与 对应支持的 go 版本 【引入报错】
+ 	3） 问题描述: kratos新项目出现import标红, 但是文件其实是在third_party文件夹里面已经存在
+  	    
+       		安装Protocol Buffers插件
+	 	到语言和框架下面将Protocol Buffers的文件路径取消自动设置,添加项目的third_party路径
+
 
 #### 安装protoc、protoc-gen-go
 
