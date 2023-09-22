@@ -1,4 +1,4 @@
-![image](https://github.com/landybird/landybird.github.io/assets/37992065/1343416e-b6fd-4f49-a091-db608211cec9)---
+---
 title: Kratos框架
 description: Kratos框架教程
 categories:
